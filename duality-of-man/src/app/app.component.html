@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<body>
+
+<div style="text-align:center" id="bigDiv">
+  <h1>
+    Duality of Man
+  </h1>
+
+
+  <div>
+      <div style="text-align:center; display: inline-table; width: 40%;">
+        <button id="switch1" (click)="onClickSwitchDuality1()">Switch to Image</button><br>
+        <div id="text1" style="text-align:center;">
+            First Duality:<br>
+            <input #d1 >
+        </div>
+        <div id="image1" style="text-align:center; width: 100%" hidden="true">
+          <input type="file" (change)="file1ChangeEvent($event)" /><br>
+          <image-cropper
+          style="display: inline-block;"
+          [imageChangedEvent]="image1ChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1 / 1"
+          [resizeToWidth]="100"
+          format="png"
+          (imageCropped)="image1Cropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+        </div>
+      </div>
+
+      <div style="text-align:center; display: inline-table; width: 40%;">
+        <button id="switch2" (click)="onClickSwitchDuality2()">Switch to Image</button><br>
+        <div id="text2" style="text-align:center; ">
+            Second Duality:<br>
+            <input #d2 >
+        </div>
+        <div id="image2" style="text-align:center; width: 100%;" hidden="true">
+          <input type="file" (change)="file2ChangeEvent($event)" />
+          <image-cropper
+          style="display: inline-block;"
+          [imageChangedEvent]="image2ChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1 / 1"
+          [resizeToWidth]="100"
+          format="png"
+          (imageCropped)="image2Cropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+        </div>
+      </div>
+    </div>
+  
+
+  <button (click)="onClickGenerate(d1.value, d2.value)">Create Man</button><br>
+
+
+  <p id="infoLabel" hidden="true">Click Image to Download.</p>
+
+  <canvas id="myCanvas" width=574 height=964 href="#" 
+  (click)="onClickDownload()" hidden=true></canvas><br>
+
+
+</div>
+
+
+<router-outlet></router-outlet>
+</body>
