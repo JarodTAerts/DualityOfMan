@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+//@import '../node_modules/bootstrap/dist/css/bootstrap.min.scss';
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import './themes.scss';
+
+* {
+    font-family: 'Roboto';
+   }
+
+html, body{
+    background-color: $primary-dark;
+    margin: 0px;
+    scroll-behavior: smooth;
+    padding: 0;
+    margin: 0;
+}
+
+html{
+    overflow: hidden;
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
+head{
+    margin: 0px;
+    background-color: $primary-dark;
+}
+
+@media screen and (max-width: 60em) {
+    html{
+        overflow: auto;
+    }
+}

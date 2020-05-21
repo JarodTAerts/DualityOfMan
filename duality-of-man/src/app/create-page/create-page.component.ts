@@ -1,147 +1,174 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { text } from '@angular/core/src/render3';
+import { DualityCreatorService } from './../services/duality-creator-service/duality-creator.service';
+import { DualityAccessorService } from '../services/duality-accessor-service/duality-accessor.service';
+import { hostViewClassName } from '@angular/compiler';
 
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
-  styleUrls: ['./create-page.component.css']
+  styleUrls: ['./create-page.component.scss']
 })
 export class CreatePageComponent implements OnInit {
 
-  ngOnInit(){
-    
-  }
+  // Services
+  dualityCreatorService: DualityCreatorService;
+  //dualityAccessorService: DualityAccessorService;
 
-  showImg;
+  // Bound Variables
+  dualityImageSource = "../../assets/DualityOfMan.PNG";
+
   image1ChangedEvent: any = '';
   image2ChangedEvent: any = '';
   croppedImage1: any = '';
   croppedImage2: any = '';
 
+  duality1Text = '';
+  duality2Text = '';
+
+  duality1ShowText = true;
+  duality2ShowText = true;
+
+  constructor(dualityCreatorService: DualityCreatorService, dualityAccessorService: DualityAccessorService) {
+    this.dualityCreatorService = dualityCreatorService;
+    //this.dualityAccessorService = dualityAccessorService;
+  }
+
+  ngOnInit() {
+    //this.onClickGenerate();
+  }
+
+  /**
+   * Function that is called automatically when a new image file is selected for Duality 1
+   * @param event Event when different image is selected for the Duality 1 cropper
+   */
   file1ChangeEvent(event: any): void {
     this.image1ChangedEvent = event;
   }
+
+  /**
+  * Function that is called automatically when a new image file is selected for Duality 2
+  * @param event Event when different image is selected for the Duality 2 cropper
+  */
   file2ChangeEvent(event: any): void {
     this.image2ChangedEvent = event;
   }
+
+  /**
+   * Function automatically called by the cropper when the image for Duality 1 is cropped
+   * @param event Event created when the image in the cropper for Duality 1 is cropped
+   */
   image1Cropped(event: ImageCroppedEvent) {
-      this.croppedImage1 = event.base64;
+    this.croppedImage1 = event.base64;
   }
+
+  /**
+  * Function automatically called by the cropper when the image for Duality 2 is cropped
+  * @param event Event created when the image in the cropper for Duality 2 is cropped
+  */
   image2Cropped(event: ImageCroppedEvent) {
     this.croppedImage2 = event.base64;
   }
+
+  /**
+   * Functions that arent being used but are necessary for the cropper
+   */
   imageLoaded() {
-      // show cropper
+    // show cropper
   }
   loadImageFailed() {
-      // show message
+    // show message
   }
 
-  public onClickSwitchDuality1(){
-    var imageDiv = document.getElementById('image1') as HTMLDivElement;
-    var textDiv = document.getElementById('text1') as HTMLDivElement;
-    var buttonDiv = document.getElementById('switch1') as HTMLButtonElement;
-    if(imageDiv.hidden==false){
-      imageDiv.hidden=true;
-      textDiv.hidden=false;
-      buttonDiv.innerText="Switch to Image"
-    }else{
-      imageDiv.hidden=false;
-      textDiv.hidden=true;
-      buttonDiv.innerText="Switch to Text"
+  /**
+   * Function that takes the contents from the inputs and actually creates the Duality image that the user
+   * can download and displays it on the screen
+   */
+  public onClickGenerate() {
+
+    let duality1;
+    let duality2;
+
+    // Get proper text or images for each of the dualities
+    if (this.duality1ShowText) {
+      duality1 = this.duality1Text;
+    } else {
+      var image = new Image();
+      image.src = this.croppedImage1;
+      duality1 = image;
+    }
+
+    if (this.duality2ShowText) {
+      duality2 = this.duality2Text;
+    } else {
+      var image = new Image();
+      image.src = this.croppedImage2;
+      duality2 = image;
+    }
+
+    // Set scoped self variable so we can access class wide properties within onload functions
+    let self = this;
+
+    /**
+     * This is a pretty jank part of the code so it warrents a pretty long explaintion. Basically the async bullshit of javascript can sometimes be difficult.
+     * I was facing the problem that the images that were sent into the duality-creator service were not always fully loaded. Oddly, when I debugged/printed the src
+     * it was apparent that these images were in fact loaded in the service, but they did not always print on the duality image. Therefore, I had to check to make sure they
+     * were both loaded before calling the service if either duality was set to image. The best way that came to mind was to just check if they both were images and
+     * call the service twice if they both were. It isn't the best method and it is kinda slow, but it at least works to put the images on the duality picture all the time.
+     */
+    if (!this.duality1ShowText) {
+      duality1.onload = () => {
+        self.dualityImageSource = self.dualityCreatorService.createDualityImage(duality1, duality2);
+      }
+    }
+    if (!this.duality2ShowText) {
+      duality2.onload = () => {
+        self.dualityImageSource = self.dualityCreatorService.createDualityImage(duality1, duality2);
+      }
+    }
+
+    // Call service not in onload if both dualities are text 
+    if (this.duality1ShowText && this.duality2ShowText) {
+      this.dualityImageSource = this.dualityCreatorService.createDualityImage(duality1, duality2);
+      // Add this duality to the database
+      //this.dualityAccessorService.AddDuality(this.duality1Text, this.duality2Text).subscribe();
     }
   }
-  public onClickSwitchDuality2(){
-    var imageDiv = document.getElementById('image2') as HTMLDivElement;
-    var textDiv = document.getElementById('text2') as HTMLDivElement;
-    var buttonDiv = document.getElementById('switch2') as HTMLButtonElement;
-    if(imageDiv.hidden==false){
-      imageDiv.hidden=true;
-      textDiv.hidden=false;
-      buttonDiv.innerText="Switch to Image"
-    }else{
-      imageDiv.hidden=false;
-      textDiv.hidden=true;
-      buttonDiv.innerText="Switch to Text"
-    }
-  }
 
-  public onClickGenerate(duality1, duality2){
-
-    let drawOutlinedText=function(context, text, posArr, posOffset, outlineColor, color){
-      context.strokeStyle=outlineColor;
-      context.lineWidth=3;
-      context.strokeText(text, posArr[0]-posOffset[0], posArr[1]+posOffset[1]);
-      drawText(context, text, posArr, posOffset, color);
-    }
-
-    let drawText=function(context, text, posArr, posOffset, color){
-      context.fillStyle=color;
-      context.fillText(text, posArr[0]-posOffset[0], posArr[1]+posOffset[1]);
-    }
-
-    let dual1Pic1=[238,140]
-    let dual2Pic1=[415,190]
-    let dual1Pic2=[195,520]
-    let dual2Pic2=[330,460]
-    let man=[260,823]
-    let fontSize=32
-    let dual1Adj=[duality1.length/2*fontSize/2, fontSize/2]
-    let dual2Adj=[duality2.length/2*fontSize/2, fontSize/2]
-    let manoffset=['man'.length/2*fontSize/2,fontSize/2]
-    let imgSize=100;
-    let imgAdj=imgSize/2;
-    let dualityImg1=new Image();
-    dualityImg1.src=this.croppedImage1;
-    let dualityImg2=new Image();
-    dualityImg2.src=this.croppedImage2;
-
-    let imageObj=new Image();
-    imageObj.src='./assets/DualityOfMan.PNG'
-    var canvas = document.getElementById('myCanvas') as HTMLCanvasElement;
-    var downloadButton = document.getElementById('infoLabel') as HTMLButtonElement;
-    canvas.hidden=false;
-    downloadButton.hidden=false;
-    var context = canvas.getContext('2d');
-
-    imageObj.onload = function () {
-        context.drawImage(imageObj, 0,0);
-        context.font = "32px Arial";
-        var imageDiv1 = document.getElementById('image1') as HTMLDivElement;
-        var imageDiv2 = document.getElementById('image2') as HTMLDivElement;
-        // Draw Text
-        if(imageDiv1.hidden){
-          drawOutlinedText(context, duality1, dual1Pic1, dual1Adj, 'black', 'white');
-          drawText(context, duality1, dual1Pic2, dual1Adj, 'black');
-        }else{
-          context.drawImage(dualityImg1, dual1Pic1[0]-imgAdj, dual1Pic1[1]-imgAdj);
-          context.drawImage(dualityImg1, dual1Pic2[0]-imgAdj, dual1Pic2[1]-imgAdj);
-        }
-
-        if(imageDiv2.hidden){
-          drawOutlinedText(context, duality2, dual2Pic1, dual2Adj, 'black', 'white');
-          drawText(context, duality2, dual2Pic2, dual2Adj, 'black');
-        }else{
-          context.drawImage(dualityImg2, dual2Pic1[0]-imgAdj, dual2Pic1[1]-imgAdj);
-          context.drawImage(dualityImg2, dual2Pic2[0]-imgAdj, dual2Pic2[1]-imgAdj);
-        }
-
-        drawText(context, "Man", man, manoffset, 'black')
-    };
-  
-  
-  }
-
-
-  public onClickDownload(){
-    var canvas = document.getElementById('myCanvas') as HTMLCanvasElement;
-
-    var image = canvas.toDataURL("image/jpg");
+  /**
+   * Function that is called when the download button is clicked and downloads the duality image
+   */
+  public onClickDownload() {
+    // Create link to download image from
     var link = document.createElement('a');
-    link.hidden=true;
+    link.hidden = true;
     link.download = "dualityOfMan.png";
-    link.href = image;
+    link.href = this.dualityImageSource;
+    // Append to body and click (need to append for download to work on firefox) then remove from body so it doesn't grow the DOM
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+  }
+
+  /**
+   * Function that will scroll to an HTML Element 
+   * @param el Element to scroll to
+   */
+  scroll(el: HTMLElement) {
+    let emWidth = window.window.innerWidth / parseFloat(getComputedStyle(document.querySelector('body'))['fontSize']);
+
+    // Only scroll to picture if it is in mobile mode and the image is below the entries
+    if(emWidth <= 60){
+      el.scrollIntoView();
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event){
+    let emWidth = event.target.innerWidth / parseFloat(getComputedStyle(document.querySelector('body'))['fontSize']);
+
+    if(emWidth>60){
+      document.getElementById('nav').scrollIntoView();
+    }
   }
 }

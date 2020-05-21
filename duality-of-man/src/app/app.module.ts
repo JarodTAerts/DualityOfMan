@@ -6,9 +6,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { HttpClientModule } from '@angular/common/http';
+
 import { NavComponent } from './nav/nav.component';
 import { CreatePageComponent } from './create-page/create-page.component';
 import { AboutPageComponent } from './about-page/about-page.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
 
 const appRoutes: Routes = [
   {
@@ -21,7 +24,13 @@ const appRoutes: Routes = [
     component: AboutPageComponent,
     data: { title: 'About' }
   },
-  { path: '',
+  {
+    path: 'admin',
+    component: AdminPageComponent,
+    data: { title: 'Admin Portal' }
+  },
+  {
+    path: '',
     redirectTo: '/create',
     pathMatch: 'full'
   },
@@ -32,7 +41,8 @@ const appRoutes: Routes = [
     AppComponent,
     NavComponent,
     CreatePageComponent,
-    AboutPageComponent
+    AboutPageComponent,
+    AdminPageComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -41,7 +51,8 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     AppRoutingModule,
-    ImageCropperModule
+    ImageCropperModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

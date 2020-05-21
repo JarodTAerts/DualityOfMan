@@ -1,0 +1,36 @@
+@import "../../themes.scss";
+
+.navbar{
+    background-color: $primary-dark;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: $accent-light;
+    height: 10%;
+}
+
+.navbar-collapse{
+    background-color: $primary-dark;
+}
+
+.nav-link{
+    font-size: 1.5em;
+}
+
+.active .nav-link{
+    color: $primary-light;
+}
+
+.nav-link:focus{
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ .navbar-brand{
+    font-size: 2em;
+    font-weight: bolder;
+ }
+
+#collapsingNavbar {
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}

@@ -1,0 +1,29 @@
+@import "../../themes.scss";
+
+.container{
+    text-align: center;
+    width: 60%;
+    color: $accent-light;
+    padding: 2em;
+}
+
+.scrollDiv{
+    height: 90%;
+    width: 100%;
+    overflow: scroll;
+}
+
+#meImg{
+    margin: 1em;
+}
+
+@media screen and (max-width: 60em) {
+
+    //You will change width of course
+    .container{
+        text-align: center;
+        width: 90%;
+        color: $accent-light;
+        padding: 2em;
+    }
+}

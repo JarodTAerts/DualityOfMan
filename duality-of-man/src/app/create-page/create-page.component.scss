@@ -1,0 +1,124 @@
+@import "../../themes.scss";
+
+#content {
+    height: 100%;
+    text-align: left;
+}
+
+.responsivePanel {
+    padding: 1em;
+    float: left;
+    height: 90%;
+    overflow: auto;
+    text-align: center;
+    transition: width 0.4s, height 0.4s;
+}
+
+#left {
+    width: 40%;
+    background: $accent-dark;
+}
+
+#right {
+    width: 60%;
+    background: $primary-dark;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: $accent-light;
+}
+
+#inline{
+    height: 1.6em;
+}
+
+.dualityPic {
+    height: 100%;
+}
+
+h2 {
+    color: $accent-light;
+    font-weight: bold;
+}
+
+.createManButton {
+    font-size: 1.5em;
+    border: none;
+    color: $accent-light;
+    background-color: $primary-light;
+    border-radius: 2em;
+    padding: 0.5em;
+    margin: 0.75em;
+    width: 75%;
+}
+
+button:focus {
+    outline: none;
+}
+
+a {
+    cursor: pointer;
+    color: $darker-dark;
+    margin: 0.5em;
+    font-size: 1em;
+    transition: font-size 0.3s ease;
+}
+
+#toggleButton:hover {
+    color: $accent-light;
+}
+
+a.active {
+    color: $primary-light;
+    font-size: 1.5em;
+    transition: font-size 0.3s ease;
+}
+
+#toggleButton.active {
+    color: $primary-light;
+}
+
+.dualityDiv {
+    margin: 1.5em;
+    text-align: center;
+}
+
+input {
+    font-size: 1.25em;
+    border-radius: 0.5em;
+    background-color: $accent-light;
+    color: $darker-dark;
+    border: none;
+    padding: 0.5em;
+    margin: 0.5em;
+    width: 80%;
+}
+
+input:focus {
+    outline: none;
+}
+
+@media screen and (max-width: 60em) {
+
+    //You will change width of course
+    .responsivePanel {
+        float: none;
+        width: 100%;
+        height: auto;
+        transition: height 0.4s;
+    }
+
+    #right {
+        width: 100%;
+        transition: width 0.4s;
+    }
+
+    #left {
+        width: 100%;
+        transition: width 0.4s;
+    }
+
+    #dualityPic{
+      height: auto;
+      width:90%;
+    }
+}

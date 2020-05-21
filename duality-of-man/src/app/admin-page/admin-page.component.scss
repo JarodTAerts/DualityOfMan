@@ -1,0 +1,11 @@
+@import "../../themes.scss";
+
+.list{
+    text-align: center;
+    color: $accent-light;
+    margin: 3vh;
+}
+
+li{
+    list-style-type: none;
+}

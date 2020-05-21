@@ -1,0 +1,7 @@
+<div class="list">
+  <h3 *ngIf = "dualities.length==0">Getting Dualities from Database</h3>
+  <h3 *ngIf = "dualities.length!=0">{{dualities.length}} Created Dualities</h3>
+  <li *ngFor="let duality of dualities">
+      <p>{{duality.Duality1}}   -   {{duality.Duality2}}</p>
+  </li>
+</div>

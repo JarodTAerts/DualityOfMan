@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  API_CONNECTION_STRING: "https://proddualityofmanapi.azurewebsites.net/api/"
 };
