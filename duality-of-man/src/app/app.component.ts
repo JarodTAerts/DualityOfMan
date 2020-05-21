@@ -11,7 +11,7 @@ import { Router, NavigationEnd } from '@angular/router';
 export class AppComponent {
   title = 'duality-of-man';
 
-  @ViewChild('nav') nav:NavComponent;
+  @ViewChild('nav', { static: true }) nav:NavComponent;
 
   constructor(private router: Router ) {
     this.router.events.subscribe((ev)=>{
