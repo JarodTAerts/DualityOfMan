@@ -15,7 +15,7 @@ export class CreatePageComponent implements OnInit {
   dualityCreatorService: DualityCreatorService;
   //dualityAccessorService: DualityAccessorService;
 
-  // Bound Variables
+  // Bound Variables -
   dualityImageSource = "../../assets/DualityOfMan.PNG";
 
   image1ChangedEvent: any = '';
